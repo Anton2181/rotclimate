@@ -2288,6 +2288,15 @@ class ClimateModel:
                     xh = (p.ws_height_frac - 0.5) * (np.minimum(h_km, p.ws_height_cap_km) if p.ws_height_cap_km > 0 else h_km)
                     if p.ws_height_lat1 > p.ws_height_lat0:   # e149b: tropical plateaus only, first km only
                         xh = xh * np.clip((p.ws_height_lat1 - np.abs(lat)) / (p.ws_height_lat1 - p.ws_height_lat0), 0.0, 1.0)
+                    if p.ws_height_dry_only and W_prev is not None and getattr(g, 'obs_pw', None) is not None:
+                        # e149c: only where the column is drier than observed (sealed HH: already-wet tropical boxes
+                        # got wetter under e149b); full when 20 % below NCEP PW, none at or above it
+                        mpq = (d / p.year_days * 12.0 - 0.5) % 12.0
+                        m0q = int(np.floor(mpq)); fq = mpq - m0q
+                        pwq = np.nan_to_num((1.0 - fq) * g.obs_pw[m0q] + fq * g.obs_pw[(m0q + 1) % 12])
+                        xh = xh * np.clip((pwq - W_prev) / np.maximum(0.2 * pwq, 1e-6), 0.0, 1.0)
+                    elif p.ws_height_dry_only:
+                        xh = xh * 0.0
                     hfrac = hfrac + xh
                 Ws = w_sat(T_col - column_lapse * hfrac)
             else:

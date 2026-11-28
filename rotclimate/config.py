@@ -75,6 +75,7 @@ class Params:
     ws_height_cap_km: float = 0.0     # e149b: the extra share applies to the first this-many km only (0 = all)
     ws_height_lat0: float = 0.0       # e149b: extra share full equatorward of lat0...
     ws_height_lat1: float = 0.0       # ...none poleward of lat1; lat1 <= lat0 = everywhere
+    ws_height_dry_only: bool = False  # e149c: extra share only where the column is below observed PW (Earth)
     plateau_heating: float = 0.0     # e134: K x season index x broad-plateau weight added to air on high ground (summer warm, winter cold); 0 = off
     plateau_heating_km: float = 1.5  # e134: smoothed (300 km) ground height where the weight starts (full 2 km higher)
     plateau_heating_cell: bool = False  # e134b: also weight by the cell's own height above plateau_heating_km
