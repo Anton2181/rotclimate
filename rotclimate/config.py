@@ -62,6 +62,9 @@ class Params:
     terrain_file: str = ""
     lapse_rate: float = 6.0           # K / km (environmental)
     lapse_seasonal: float = 0.0       # e25: lapse rate x (1 + this x season index): steeper in summer, flatter in winter
+    lapse_tropical: float = 0.0       # e146: extra K/km in the tropics (full to lapse_tropical_lat0, none by lat1); 0 = off
+    lapse_tropical_lat0: float = 12.0
+    lapse_tropical_lat1: float = 30.0
     plateau_heating: float = 0.0     # e134: K x season index x broad-plateau weight added to air on high ground (summer warm, winter cold); 0 = off
     plateau_heating_km: float = 1.5  # e134: smoothed (300 km) ground height where the weight starts (full 2 km higher)
     plateau_heating_cell: bool = False  # e134b: also weight by the cell's own height above plateau_heating_km

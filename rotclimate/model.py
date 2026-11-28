@@ -106,7 +106,7 @@ BAND_FIELDS = ("hadley_edge", "itcz_mean", "storm_width", "subsidence_width", "c
                "subsidence_branch_gate_winter_deg", "subsidence_branch_gap", "edge_itcz_width", "subtropical_high_width",
                "dyn_omega_lat0", "dyn_omega_lat1", "obs_pw_nudge_wet_lat0", "obs_pw_nudge_wet_lat1",
                "convective_omega_lat0", "convective_omega_lat1", "monsoon_descent_tropics_lat0",
-               "monsoon_descent_tropics_lat1", "root_lat0", "root_lat1")
+               "monsoon_descent_tropics_lat1", "root_lat0", "root_lat1", "lapse_tropical_lat0", "lapse_tropical_lat1")
 BAND_FIELDS_SENTINEL = {"itcz_shift_ocean": lambda v: v < 0, "itcz_mean_land": lambda v: v <= -90,
                         "current_cold_lat0": lambda v: v <= 0, "current_warm_lat0": lambda v: v <= 0,
                         "storm_baroclinic_max_deg": lambda v: v <= 0, "storm_plateau_reach_deg": lambda v: v <= 0,
@@ -2173,6 +2173,13 @@ class ClimateModel:
                 # year-round rate gives (Chile's Andes 9-11 C too warm in
                 # summer at the fitted 4.4 K/km)
                 lapse = p.lapse_rate * (1.0 + p.lapse_seasonal * s)
+            if p.lapse_tropical != 0:
+                # e146: the tropical near-surface lapse is close to moist-adiabatic all year (no winter inversions);
+                # with one fitted 4.35 K/km, tropical uplands ran warm against their own lowlands (r63, within-region:
+                # +1.44 K/km at 0-12 deg, +0.57 at 12-24, +0.07 at 48-70): East African and Zambian plateaus too warm,
+                # West African and Amazon lowlands too cold. Extra K/km, full to lat0 and gone by lat1.
+                lapse = lapse + p.lapse_tropical * np.clip((p.lapse_tropical_lat1 - np.abs(lat))
+                                                          / max(p.lapse_tropical_lat1 - p.lapse_tropical_lat0, 1e-6), 0.0, 1.0)
             T = Tsl - lapse * h_km
             if p.plateau_heating != 0:
                 # e134: a broad high plateau is an elevated heat source in summer and an elevated cold surface in
