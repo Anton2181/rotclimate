@@ -1,0 +1,53 @@
+{
+ "version": 1,
+ "date": "2026-11-28",
+ "policy": "v6",
+ "status": "NEW wave, declared after the e150 screen (output/ppe_20261127/al: al10, al20, al20r) and before any W26 run",
+ "why": "The model had no land albedo. e150 (NCEP snow-free albedo) alone: al20 fixes the warm eastern Sahara/Tibesti (+1.81 -> +0.13 C) and Tibet but over-cools Algeria/Najd/interior Australia (S97 1.016-1.041): the desert-heating knobs were fitted to compensate. Joint refit of albedo with its compensators.",
+ "method": "scripts/ppe.py: Sobol wave 1 (32 + base), GP emulators, emulator waves of 12; close when the predicted gain over the best observed point is < 0.005; at most 2 emulator waves; propose ONCE per wave. Finalist = best by dev objective ONLY; dev6 vs r63, fine28 vs r63, ONE sealed run on a NEW set declared before it is drawn.",
+ "base": "calibration/local_accuracy_20261023/r63_params.json",
+ "base_set": {
+  "land_albedo": 10.0,
+  "land_albedo_ref": 0.2
+ },
+ "reference": "output/ppe_20261127/ref63",
+ "reference_name": "r63",
+ "extra_parts": {
+  "tropical_t": "calibration/tropical_check_20261122t/regions.json",
+  "sealed_r": "calibration/sealed_20261122r/regions.json",
+  "sealed_S18": "calibration/sealed_20261123S18/regions.json",
+  "sealed_U18": "calibration/sealed_20261124U18/regions.json"
+ },
+ "out": "output/ppe_20261127/W26",
+ "seed": 20261226,
+ "wave1": 32,
+ "knobs": {
+  "land_albedo": [
+   0.0,
+   20.0,
+   "lin"
+  ],
+  "land_albedo_ref": [
+   0.16,
+   0.26,
+   "lin"
+  ],
+  "dry_heating": [
+   0.5,
+   3.0,
+   "lin"
+  ],
+  "subsidence_warming": [
+   4.0,
+   9.5,
+   "lin"
+  ],
+  "land_offset": [
+   -2.6,
+   -1.0,
+   "lin"
+  ]
+ },
+ "gates": "policy v6 vs r63; pass -> r64",
+ "base_note": "r63 + e150 al10"
+}
