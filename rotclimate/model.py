@@ -3010,6 +3010,9 @@ class ClimateModel:
                         ((1.0 - p.obs_pw_nudge_wet_excess) * pwo - W_prev) / np.maximum(0.2 * pwo, 1e-6), 0.0, 1.0)
                     if p.obs_pw_nudge_h1 > p.obs_pw_nudge_h0:
                         kw = kw * np.clip((p.obs_pw_nudge_h1 - h_km) / (p.obs_pw_nudge_h1 - p.obs_pw_nudge_h0), 0.0, 1.0)
+                    if p.obs_pw_nudge_wet_lat1 > p.obs_pw_nudge_wet_lat0:
+                        # e145b: tropics only (the Kazakh steppe and middle Volga flood under it)
+                        kw = kw * np.clip((p.obs_pw_nudge_wet_lat1 - np.abs(lat)) / (p.obs_pw_nudge_wet_lat1 - p.obs_pw_nudge_wet_lat0), 0.0, 1.0)
                     kn = kn + kw
                 sink = (0.0 if sink is None else sink) + kn
                 E_surf143 = E_land
