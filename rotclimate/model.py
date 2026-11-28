@@ -2281,7 +2281,9 @@ class ClimateModel:
                 # the column over high ground is colder (lapse rate) but the
                 # low-level moisture that cannot climb is diverted around the
                 # mountain rather than squeezed out: compare like with like
-                Ws = w_sat(T_col - 0.5 * column_lapse * h_km)
+                # e149: the share of the ground's height the column capacity feels (0.5 historical); a plateau's
+                # column starts at its own surface (Kalahari 1.1 km: capacity 64 mm vs ~50 real, RH under the gate)
+                Ws = w_sat(T_col - p.ws_height_frac * column_lapse * h_km)
             else:
                 Ws = w_sat(T_col - column_lapse * h_km) * np.exp(-h_km / 6.0)
             if p.column_saturation_scheme=='legacy':ocean_saturation=w_sat(SST)
