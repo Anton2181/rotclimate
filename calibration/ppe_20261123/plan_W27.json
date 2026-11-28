@@ -1,0 +1,31 @@
+{
+ "version": 1,
+ "date": "2026-11-28",
+ "policy": "v7",
+ "status": "NEW wave, declared after the e153 / e153b screens (output/ppe_20261127/e153, e153b) and before any W27 run",
+ "why": "Northern hot dry lands run cold (North India -2.7, Najd -2.6, Sudan -2.5, Iran -2.2, Deccan -2.3 C) - world-legal targets (the world is a northern map). e153 (dry heating in warm climates) fixes them but warms the bright eastern Sahara / Kalahari; e150 (albedo) cools exactly those and over-cools Najd/Algeria. Joint refit of both with their compensators.",
+ "method": "scripts/ppe.py: Sobol wave 1 (40 + base), GP emulators, emulator waves of 12; close when the predicted gain over the best observed point is < 0.005; at most 2 emulator waves; propose ONCE per wave. Finalist by policy v7 M3 (scripts/finalist.py obj, obj < 1); dev6 vs r64b; fine28 vs r64b; sentinel (S <= 1.01, no box > 1.25); ONE sealed run on bank boxes declared before the draw; transfer share reported.",
+ "base": "calibration/local_accuracy_20261023/r64b_params.json",
+ "base_set": {"dry_heating_hot": 1.5, "dry_heating_hot_c": 15.0, "land_albedo": 8.0, "land_albedo_ref": 0.2},
+ "reference": "output/ppe_20261127/ref64b",
+ "reference_name": "r64b",
+ "extra_parts": {
+  "tropical_t": "calibration/tropical_check_20261122t/regions.json",
+  "sealed_r": "calibration/sealed_20261122r/regions.json",
+  "sealed_S18": "calibration/sealed_20261123S18/regions.json",
+  "sealed_U18": "calibration/sealed_20261124U18/regions.json"
+ },
+ "out": "output/ppe_20261127/W27",
+ "seed": 20261227,
+ "wave1": 40,
+ "knobs": {
+  "dry_heating_hot": [0.0, 3.0, "lin"],
+  "dry_heating_hot_c": [10.0, 22.0, "lin"],
+  "land_albedo": [0.0, 15.0, "lin"],
+  "dry_heating": [0.8, 2.2, "lin"],
+  "subsidence_warming": [5.0, 8.5, "lin"],
+  "land_offset": [-2.3, -1.2, "lin"]
+ },
+ "gates": "policy v7 vs r64b; pass -> r64c",
+ "base_note": "r64b + e153 h15c15 + e150 al8"
+}
