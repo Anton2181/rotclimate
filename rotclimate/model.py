@@ -2705,6 +2705,17 @@ class ClimateModel:
                     # descent (calibration/monsoon_convection_20261121/plan_e94.json)
                     descent_cap = np.clip(descent / p.convective_descent_ref, 0.0, 1.0)
                     instab = 1.0 + (instab - 1.0) * (1.0 - p.convective_descent * descent_cap)
+            omega_cap = None
+            if p.convective_omega > 0 and getattr(g, "obs_omega", None) is not None:
+                # e141: deep convection needs large-scale ascent. Southern Somalia's column is as moist as NCEP's
+                # (36-39 mm) and hot, so the instability boost (x2.5) rained 10 mm/day all summer (obs <1) under
+                # steady 500 hPa sinking (+0.02-0.035 Pa/s, as over the Sahara) that the e49 kernel (descent west and
+                # poleward of monsoon heating) does not place there. Earth grids read the observed omega.
+                mpo = ((d - p.winter_solstice_day) / p.year_days * 12.0 + 12.0 - 0.838) % 12.0
+                m0o = int(np.floor(mpo)); fo = mpo - m0o
+                om = (1.0 - fo) * g.obs_omega[m0o % 12] + fo * g.obs_omega[(m0o + 1) % 12]
+                omega_cap = p.convective_omega * np.clip(om / p.convective_omega_ref, 0.0, 1.0)
+                instab = 1.0 + (instab - 1.0) * (1.0 - omega_cap)
             gain = None
             if p.flux_convergence > 0:
                 # e17: moisture moves with u.grad(W), which leaves out -W div(u):
@@ -2732,6 +2743,8 @@ class ClimateModel:
                                fT=np.clip((T_col - 15.0) / 10.0, 0.0, 1.0))
                 if p.convective_descent > 0 and p.monsoon_descent > 0:
                     closure['conv'] = p.convective_rain * (1.0 - p.convective_descent * descent_cap)      # e94
+                if omega_cap is not None:
+                    closure['conv'] = closure['conv'] * (1.0 - omega_cap)                                 # e141
                 if p.convective_rh_heat > 0:
                     # e92: the Bretherton closure (fitted over tropical seas) ties convection to column RH alone. Over land
                     # surface heating supplies the instability, so convection starts at a lower column RH: r49 rains
@@ -2780,6 +2793,8 @@ class ClimateModel:
                         heat = heat * (1.0 - np.clip((chi93 - p.convective_rh_chi0) / (1.0 - p.convective_rh_chi0), 0.0, 1.0))
                     if p.convective_descent > 0 and p.monsoon_descent > 0:
                         heat = heat * (1.0 - descent_cap)                       # e94
+                    if omega_cap is not None:
+                        heat = heat * (1.0 - omega_cap)                         # e141
                     closure['r0'] = p.convective_rh - np.where(land, p.convective_rh_heat * heat, 0.0)
                 if p.convective_cap_land > 0:
                     closure['cap'] = np.where(land, p.convective_cap_land, 0.0)          # e104

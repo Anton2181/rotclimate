@@ -235,6 +235,7 @@ def region_case(name: str, cell_km: float = 28.0, pad_km: float = 1100.0) -> Ear
     g.obs_sst = observed_sst(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)   # WOA18, for sst_source="observed"
     g.obs_pw = observed_pw(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)     # e116: NCEP column water
     g.zonal_pw = zonal_land_pw(-lat if lat0 < 0 else lat, mirrored=lat0 < 0)     # e116z: latitude-only stand-in
+    g.obs_omega = observed_omega(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)   # e141
     g.obs_slp_fall = observed_slp_fall(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)   # e140
     g.cloud_ref = land_cloud_at(-lat if lat0 < 0 else lat, mirrored=lat0 < 0)    # e43
     g.descent = monsoon_descent_at(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)   # e49
@@ -649,6 +650,25 @@ def observed_slp_fall(lat, lon, mirrored=False, smooth_km=500.0):
     wrap = np.concatenate([fall_n, fall_n[:, :, :1]], axis=2)
     out = np.stack([ndi.map_coordinates(wrap[m], [i, j], order=1, mode="nearest") for m in range(12)])
     out = np.sign(np.where(lat == 0, 1.0, lat)) * out                # poleward in the point's own hemisphere
+    return np.roll(out, 6, axis=0) if mirrored else out
+
+
+NCEP_OMEGA = CACHE / "ncep_omega500_2p5.npz"   # scripts/build_ncep_slp.py (e141)
+
+
+def observed_omega(lat, lon, mirrored=False):
+    """e141: monthly NCEP/NCAR long-term-mean 500 hPa vertical velocity [12, ...] (Pa/s, positive = sinking) at points
+    (bilinear on 2.5 deg); months shifted by six for mirrored southern regions. None when the cache is absent."""
+    if not NCEP_OMEGA.exists():
+        return None
+    from scipy import ndimage as ndi
+
+    z = np.load(NCEP_OMEGA)
+    om, plat = z["omega"].astype(float), z["lat"]
+    i = (plat[0] - np.asarray(lat, float)) / (plat[0] - plat[1])
+    j = (np.asarray(lon, float) % 360.0) / 2.5
+    wrap = np.concatenate([om, om[:, :, :1]], axis=2)
+    out = np.stack([ndi.map_coordinates(wrap[m], [i, j], order=1, mode="nearest") for m in range(12)])
     return np.roll(out, 6, axis=0) if mirrored else out
 
 

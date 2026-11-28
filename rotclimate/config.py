@@ -170,6 +170,8 @@ class Params:
     monsoon_westerly_floor: float = 0.0  # e109: minimum share of monsoon_westerly applied where the poleward pressure fall is too weak (Coriolis turning without a heat low on the map); 0 = off
     monsoon_obs_pressure: float = 0.0  # e140: share (0-1) of the e55 gate's poleward pressure fall taken from NCEP sea-level pressure (Earth grids only; region maps miss heat lows off the map); 0 = off
     trade_obs_pressure: float = 0.0    # e140: the same for the e83 trade weakening
+    convective_omega: float = 0.0      # e141: share (0-1) by which observed 500 hPa sinking caps convection (instability, closure, heated-land RH) on Earth grids; 0 = off
+    convective_omega_ref: float = 0.03 # e141: omega (Pa/s) of full cap
     trade_speed: float = 6.0          # m/s
     westerly_speed: float = 7.0       # m/s
     polar_speed: float = 3.0

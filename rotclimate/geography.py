@@ -254,6 +254,7 @@ class Grid:
     sea_depth: np.ndarray | None = None      # e50: sea depth (m, to 1,500) from the World Ocean Atlas 2018 profiles (Earth mode; other grids take a shelf by distance from the coast)
     zonal_pw: np.ndarray | None = None  # e116z: [12, ny, nx] the globe's land-mean NCEP column water at each latitude (model fills it lazily)
     obs_sst: np.ndarray | None = None   # Earth mode: observed monthly sea-surface temperature [12, ny, nx]
+    obs_omega: np.ndarray | None = None  # e141: Earth mode, observed 500 hPa omega [12, ny, nx] (Pa/s, + = sinking)
     obs_slp_fall: np.ndarray | None = None  # e140: Earth mode, observed poleward sea-level pressure fall [12, ny, nx] (hPa / 1000 km)
     obs_pw: np.ndarray | None = None    # Earth mode: observed monthly precipitable water [12, ny, nx] (e116)
     obs_wind: np.ndarray | None = None  # Earth diagnostics: observed monthly surface winds [12, 2 (east, north), ny, nx]
