@@ -3,5 +3,10 @@
  "method": "make_sealed_set.py LAND_MIN 0.7, clear of every known region (AA-HH included): draw1 0-18 deg 120 km seed 20261701; if fewer than 6 boxes, draw2 0-18 deg 100 km seed 20261702 (merged, all kept)",
  "why": "e149c lowers column capacity on tropical land up to 1.5 km high, only where the column is drier than NCEP PW, faded out by 18 deg; HH showed the ungated e149b wetted already-wet boxes",
  "gate": "ONE run on II paired with r63, only if fine28 passes; gate_v3.py sealed5 part sealed_II; pass -> r64",
- "seen_by": ["e149b wb2 (HH, failed)", "e149c wc1"]
+ "seen_by": [
+  "e149b wb2 (HH, failed)",
+  "e149c wc1"
+ ],
+ "drawn": "draw1 (120 km) gave 6 boxes -> II = draw1; no draw2",
+ "regions": "calibration/sealed_20261128II/regions.json (6)"
 }
