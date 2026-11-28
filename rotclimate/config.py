@@ -140,6 +140,8 @@ class Params:
     dyn_omega: float = 0.0           # e144 (Earth cases only): large-scale rain ascent falls by up to this fraction under observed 500 hPa sinking; 0 = off
     dyn_omega0: float = 0.02         # e144: sinking [Pa/s] where the damping starts
     dyn_omega1: float = 0.04         # e144: sinking [Pa/s] where it is full
+    dyn_omega_lat0: float = 0.0      # e144b: damping fades from full at lat0 to none at lat1 (deg); lat1 <= lat0 = no fade
+    dyn_omega_lat1: float = 0.0
     obs_pw_nudge: float = 0.0        # e143 (Earth cases only): land column water relaxes toward NCEP monthly PW at this rate [1/day]; 0 = off
     obs_pw_nudge_dry_only: float = 0.0  # e143: >0 nudges only columns wetter than observed, ramping in over this fraction of obs PW
     obs_pw_nudge_excess: float = 0.0  # e143c: dry-only nudge starts where W exceeds (1 + excess) x observed PW

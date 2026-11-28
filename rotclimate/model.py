@@ -2489,6 +2489,9 @@ class ClimateModel:
                 m0d = int(np.floor(mpd)); fd = mpd - m0d
                 omd = (1.0 - fd) * g.obs_omega[m0d % 12] + fd * g.obs_omega[(m0d + 1) % 12]
                 ramp = np.clip((omd - p.dyn_omega0) / max(p.dyn_omega1 - p.dyn_omega0, 1e-6), 0.0, 1.0)
+                if p.dyn_omega_lat1 > p.dyn_omega_lat0:
+                    # e144b: poleward the monthly-mean sinking coexists with frontal storms (Korea, Japan, Victoria)
+                    ramp = ramp * np.clip((p.dyn_omega_lat1 - np.abs(lat)) / (p.dyn_omega_lat1 - p.dyn_omega_lat0), 0.0, 1.0)
                 A_dyn = A_dyn * (1.0 - p.dyn_omega * ramp)
             lamE = np.where(ocean, 1.0 / (p.evap_tau_days * DAY), 0.0)
             if self.inflow_enabled:
