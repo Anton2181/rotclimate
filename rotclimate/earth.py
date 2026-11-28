@@ -250,6 +250,13 @@ def region_case(name: str, cell_km: float = 28.0, pad_km: float = 1100.0) -> Ear
         # Earth score measures only the skill that transfers to the atlas (scripts/transfer_score.py). Terms
         # gated on these fields drop out; run with the world parameter set (edge_pw_source "zonal").
         g.obs_pw = g.obs_om700 = g.obs_rh500 = g.obs_albedo = g.obs_omega = g.obs_slp_fall = None
+    if os.environ.get("ROTCLIMATE_ANALOG_OBS") == "1":
+        # T10c: replace the observed omega / RH500 by Earth analogs (world-legal), leaving out Earth samples within
+        # ROTCLIMATE_ANALOG_EXCLUDE_KM (default 2,500) of the region, as a world cell would have no Earth neighbour
+        from .analog_fields import earth_features_at, predict
+        F = earth_features_at(-lat if lat0 < 0 else lat, lon)
+        g.obs_omega, g.obs_rh500 = predict(F, centre=(lat0, lon0),
+                                           exclude_km=float(os.environ.get("ROTCLIMATE_ANALOG_EXCLUDE_KM", "2500")))
     for fld in filter(None, os.environ.get("ROTCLIMATE_WITHHOLD", "").split(",")):
         # Meta M1b: withhold single observed fields (e.g. obs_omega,obs_rh500) to rank what an Earth gain rests on
         setattr(g, fld.strip(), None)
