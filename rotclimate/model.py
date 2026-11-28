@@ -2934,11 +2934,20 @@ class ClimateModel:
                             # NCEP's, rain a tenth of observed)
                             cut93 = cut93 * keep152
                         heat = heat * (1.0 - cut93)
+                    rel152 = keep152 if (p.convective_rh_gate_rh500_chi and keep152 is not None) else 1.0   # e152d
                     if p.convective_descent > 0 and p.monsoon_descent > 0:
-                        heat = heat * (1.0 - descent_cap)                       # e94
+                        heat = heat * (1.0 - descent_cap * rel152)              # e94 (e152d: released where aloft is moist)
                     if omega_cap is not None:
-                        heat = heat * (1.0 - omega_cap)                         # e141
+                        heat = heat * (1.0 - omega_cap * rel152)                # e141 (e152d)
                     closure['r0'] = p.convective_rh - np.where(land, p.convective_rh_heat * heat, 0.0)
+                    if p.convective_rh_gate_rh500_chi and keep152 is not None:
+                        # e152d: ... and the same release of the descent / omega scaling of the convective rate itself
+                        c152 = p.convective_rain * np.ones_like(lat)
+                        if p.convective_descent > 0 and p.monsoon_descent > 0:
+                            c152 = c152 * (1.0 - p.convective_descent * descent_cap * rel152)
+                        if omega_cap is not None:
+                            c152 = c152 * (1.0 - omega_cap * rel152)
+                        closure['conv'] = np.where(land, c152, closure['conv'])
                 if p.convective_cap_land > 0:
                     closure['cap'] = np.where(land, p.convective_cap_land, 0.0)          # e104
             mix = (lambda water: gauss(water, sigW)) if p.eddy_rate > 0 else None
