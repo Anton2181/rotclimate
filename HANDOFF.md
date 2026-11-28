@@ -10651,3 +10651,7 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
   Worst March-June (-2.5 to -3.7) with monsoon onset a month early (Jun 185 vs 86 mm) and withdrawal early (Oct 4 vs
   43 mm); dry-season column water below NCEP (10-18 vs 13-26 mm). This is C1 (hot dry land too cold) in its
   clearest case; next lead = the pre-monsoon land energy balance / onset timing over the Indo-Gangetic plain.
+- e148 (observed PW in the land greenhouse) neutral S97 0.9990; e149/e149b (plateau share in column capacity):
+  wb2 passed dev6 (0.9911) and fine28 but FAILED sealed HH (1.0115, rain +3.7 %). HH SPENT (AA-HH all spent).
+  Kalahari diagnosed: sverdrup suppression + plateau capacity + no heat-low convection trigger
+  (calibration/kalahari_20261128). r63 stays current.

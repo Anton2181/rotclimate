@@ -14,3 +14,11 @@ Rain components (scratchpad rainparts), summer run months 6-9:
 Conclusion: the Kalahari (and interior Australia, same signature) needs a heat-low convection trigger (surface
 heating x boundary-layer moisture) that column-RH closures lack. New physics; risk = Sahara/Arabia summer rain.
 e149 screened on its own (plateaus everywhere: Zambia wet-season RH ~0.6 at 800-1,300 m is the same capacity issue).
+
+e149 (global ws_height_frac), screen_e149.log - FAIL: 0.75 S97 1.0075, 1.0 S97 1.0354 (highland 1.35/1.86:
+Altiplano, Tibet, Great Basin, Mongolia, California far too wet).
+e149b (first 1.5 km only, tropical fade), screen_e149b.log: wb1 (15-25) 0.9942, wb2 (10-18) 0.9911 [0.9834, 0.9980],
+wb3 (0.75) 0.9957. wb2 dev6 PASS vs r63 (arid 1.0015, tropical_dry 0.962), fine28 1.000, sealed HH FAIL S 1.0115
+[0.998, 1.038] (rain +3.7 %: already-wet boxes wetter). CLOSED, r63 stays. The dev gain is in the drier tropical
+plateaus (Katanga, Zambia, CAR); wet lowland boxes get wetter. A wetness gate (e.g. only where the column is below
+NCEP PW) would be the next variant, but HH is spent and the next run needs a new set.
