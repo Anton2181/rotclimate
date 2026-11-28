@@ -387,6 +387,7 @@ class Params:
     convective_rh_gate_rh500_hi: float = 0.0   # e152: ... and none above this; hi <= lo = off
     convective_rh_gate_rh500_lat0: float = 0.0   # e152b: the e152 release fades in from none at |lat| lat0 ...
     convective_rh_gate_rh500_lat1: float = 0.0   # e152b: ... to full at lat1 (deg); lat1 <= lat0 = everywhere
+    convective_rh_gate_rh500_soil: float = 0.0   # e152c: release only while soil wetness is below this (fraction of 0.75 bucket); 0 = always
     land_phase_cont_days: float = 0.0  # e151: deep-continental land cycle earlier by this x clip(2 (chi - 0.5), 0, 1) days (0 = off)
     snow_albedo: float = 0.0          # e16: K of land cooling under full snow cover per 480 W m-2 of sunshine
     snow_inversion: float = 0.0       # e128: K of 2 m cooling under full snow cover in full darkness (surface inversion)

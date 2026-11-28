@@ -2905,6 +2905,12 @@ class ClimateModel:
                                 w152 = np.clip((np.abs(lat) - p.convective_rh_gate_rh500_lat0)
                                                / (p.convective_rh_gate_rh500_lat1 - p.convective_rh_gate_rh500_lat0), 0.0, 1.0)
                                 keep152 = 1.0 - w152 * (1.0 - keep152)
+                            if p.convective_rh_gate_rh500_soil > 0 and p.soil_bucket_mm > 0:
+                                # e152c: before the rains only. Once the soil is wet the belt has arrived and the r63 cap
+                                # set the wet-season rain right (Zimbabwe: the release added 40-60 mm/month Nov-Mar).
+                                # Release x clip(1 - wetness / this, 0, 1), wetness = soil water / (0.75 x bucket).
+                                wet152 = np.clip(soil_w / (0.75 * capb), 0.0, 1.0)
+                                keep152 = 1.0 - (1.0 - keep152) * np.clip(1.0 - wet152 / p.convective_rh_gate_rh500_soil, 0.0, 1.0)
                             ramp93 = ramp93 * keep152
                         heat = heat * (1.0 - p.convective_rh_gate * ramp93)
                     if p.convective_rh_chi0 > 0 and chi is not None:
