@@ -7,3 +7,10 @@ Earth-only NCEP fields (r60/r61 omega cap, r63 wet PW nudge, r64/r64b 500 hPa RH
 chain of paired steps, the world number one direct comparison.
 Priority before the r70 rebuild: model-diagnosed stand-ins for observed 500 hPa omega and RH (and PW), so the r60-r64b
 mechanisms reach the world.
+
+## Note: e49 monsoon descent on Earth grids comes from WorldClim OBSERVED rain (the rain target)
+earth.monsoon_descent() builds the 1-deg descent field from WorldClim land rain; world grids compute theirs from their
+own simulated rain (model._descent). The world-legal mode keeps the Earth field as the stand-in for the world's
+globally computed one (a regional window would miss remote sources: Iran's descent comes from India), but it is a mild
+target leak in the Earth harness (rain input -> rain score). Candidate fix for r65/r70: build the Earth descent field
+from a global model rain climatology (e.g. the r70 world-style run on Earth) instead of WorldClim.
