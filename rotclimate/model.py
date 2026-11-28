@@ -1636,6 +1636,13 @@ class ClimateModel:
                     cold = np.clip((p.dry_heating_cold_sst - self._sst_last[self._dh_near]) / 3.0, 0.0, 1.0)
                     dry = dry * (1.0 - self._dh_prox * cold)
                 Tl = Tl + np.where(land, p.dry_heating * dry * S_dry / LAND_COUPLING_SREF, 0.0)
+                if p.dry_heating_hot > 0 and annual_eq is not None:
+                    # e153: extra sunshine heating of dry ground in warm climates only (annual-mean land equilibrium
+                    # ramping in over 8 K above dry_heating_hot_c). The hot plains run 2-4 C cold all year (Ganges
+                    # -3.5, Sahel May -4, Najd -2.6) while a stronger dry_heating everywhere warmed the cold steppes
+                    # (Kazakh steppe, Hokkaido: the r40 dry-heat refit failed its sealed set).
+                    Tl = Tl + np.where(land, p.dry_heating_hot * dry * S_dry / LAND_COUPLING_SREF
+                                       * np.clip((annual_eq - p.dry_heating_hot_c) / 8.0, 0.0, 1.0), 0.0)
             if self.tap is not None: self.tap('dry_heating', d, Tl)
             if (p.cloud_radiation > 0 or p.cloud_longwave > 0) and cloud_prev is not None:
                 # e4: the latitude-mean land column carries its latitude's mean

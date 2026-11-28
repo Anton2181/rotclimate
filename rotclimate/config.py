@@ -399,6 +399,8 @@ class Params:
     convective_om700_hi: float = 0.0   # e152f: ... none where >= this; hi <= lo = no omega gate
     convective_om500_lo: float = 0.0   # e152f: ... and full where NCEP 500 hPa omega <= this (Pa/s), none where >= om500_hi
     convective_om500_hi: float = 0.0
+    dry_heating_hot: float = 0.0     # e153: extra dry-ground sunshine heating (as dry_heating) in warm climates only; 0 = off
+    dry_heating_hot_c: float = 15.0  # e153: ... ramping in over 8 K above this annual-mean land equilibrium (C)
     land_phase_cont_days: float = 0.0  # e151: deep-continental land cycle earlier by this x clip(2 (chi - 0.5), 0, 1) days (0 = off)
     snow_albedo: float = 0.0          # e16: K of land cooling under full snow cover per 480 W m-2 of sunshine
     snow_inversion: float = 0.0       # e128: K of 2 m cooling under full snow cover in full darkness (surface inversion)
