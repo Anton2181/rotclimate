@@ -10689,3 +10689,9 @@ Kalahari rain loss 0.99 -> 0.84, inland Australia 0.75 -> 0.43 (but still ~1/2-1
 output/ppe_20261127/ref64b/r64b_<part> (screen_v6 with ref64b r64b). Named r64b: r65 stays the big recalibration.
 Also committed, off, no effect in probes: e145c (dry-soil extratropical wet nudge; Kalahari sits above the 1-2 km nudge
 fade), e152d (rh500 release of the chi0 cut).
+
+## OWNER PLAN (28 Nov 2026): keep developing until r70, then a full comprehensive atlas rebuild
+(No atlas rebuild before r70. The r65 big recalibration of all settings, incl. tilt scaling, stays as planned.)
+Progress since the last rebuild (r58): chained dev6 product r59..r64b = 0.884 (-11.6 % loss); sealed product 0.781
+(optimistic: small, targeted sets). r60+ gains rest largely on Earth-only observed fields (omega, rh500, PW): they do
+not reach the world atlas; measure the transferable share before the r70 rebuild.
