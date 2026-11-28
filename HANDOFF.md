@@ -4,6 +4,11 @@ climate gains and rebuild only when asked or when a substantial set of gains has
 **OWNER RULE (27 Nov 2026): "It's about earth accuracy first and foremost, always."** Painted-zone agreement on the
 invented world never outweighs Earth accuracy; the r58 atlas stands despite the Mediterranean loss (strict 0.35->0.22).
 
+# r61 ADOPTED (28 Nov 2026): r60 + e141c (convective_omega_lat0 15, lat1 25, sea_chi 0.7): the observed-descent cap
+spares subtropical sea air (onshore coast rain). dev6 vs r60 0.9986 [q95 0.9995], fine28 0.9978, sealed EE 0.9805
+[0.947, 1.001] (Hawaii box dominates). r61_adoption.json; reference for paired screens: output/ppe_20261127/ref61.
+EE SPENT. e141b (latitude-only fade) closed neutral. Atlas still r58 (r59-r61 are Earth-only gains except r59's currents).
+
 # r60 ADOPTED (28 Nov 2026): r59 + e141 convective_omega 1.0, convective_omega_ref 0.015.
 Observed NCEP 500 hPa sinking (data/cache/earth/ncep_omega500_2p5.npz via scripts/build_ncep_slp.py) caps convection on
 Earth grids. dev6 vs r59 S97 0.9715 [q95 0.9989] (rain -5.7 %, Somalia rain loss 2.98 -> 0.95, Sahel/Chad better;

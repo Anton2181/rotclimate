@@ -3,8 +3,10 @@
  "method": "make_sealed_set.py LAND_MIN 0.55, 150 km boxes, clear of every known region (AA-DD included): north band 15-40 deg seed 20261311, then south band -40 to -15 deg seed 20261312; all boxes kept",
  "why": "e141c acts only poleward of 15 deg on air off the sea; the set covers that band in both hemispheres",
  "gate": "ONE run on EE paired with r60; gate_v3.py sealed5 part sealed_EE; pass -> r61",
- "seen_by": [],
- "outcome": "UNOPENED",
+ "seen_by": [
+  "e141c oc07"
+ ],
+ "outcome": "SPENT: PASS S 0.9805 -> r61",
  "amendment": "before any EE region ran: the 15-40 deg 150 km draw (seed 20261311) found only 3 free boxes (the script draws both hemispheres) and the south-band call found none; added draw2 (seed 20261312) and draw3 (seed 20261313), 15-45 deg, 120 km; all boxes kept",
  "regions": "calibration/sealed_20261128EE/regions.json (15)"
 }
