@@ -10646,3 +10646,8 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
   calibration/lapse_20261128. All new keys default off; recent latitude fades registered for tilt scaling.
 - r63 loss map (all 103 regions): worst Namibia/Kalahari 1.89, Patagonia 1.66, S Somalia 1.66, North India 1.65
   (T MAE 3.2 C), Tibesti 1.64, interior W Australia 1.60, Bolivian lowlands 1.60, S Patagonia 1.56.
+- North India (loss 1.65, T MAE 3.2 C), r63 probe: plains (< 1 km, 400 of 494 cells) -3.2 to -3.5 C all year, Himalaya
+  > 4.5 km +1.1 C. A plain-only box (gplain 25.8N 81E, 600x300 km) is still -2 to -3.7 C: local, not Himalayan air.
+  Worst March-June (-2.5 to -3.7) with monsoon onset a month early (Jun 185 vs 86 mm) and withdrawal early (Oct 4 vs
+  43 mm); dry-season column water below NCEP (10-18 vs 13-26 mm). This is C1 (hot dry land too cold) in its
+  clearest case; next lead = the pre-monsoon land energy balance / onset timing over the Indo-Gangetic plain.
