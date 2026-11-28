@@ -27,3 +27,14 @@ e149c (dry-only gate), screen_e149c.log: wc1 (10-18) S97 0.9920 [0.9866, 0.9966]
 fine28 1.000, sealed II FAIL S 1.0016 [0.999, 1.013] (neutral: five of six boxes lowland). CLOSED, r63 stays.
 The development gain sits in a handful of tropical plateau boxes (CAR, Katanga, Angola, Ecuador); new sets drawn at
 random in 0-18 deg mostly miss them, so two sealed sets (HH, II) did not confirm it.
+
+Heat-triggered convection (e92 convective_rh_heat 0.39 exists) is removed over the Kalahari by the e93 cap
+(convective_rh_gate 1.0, the Saharan-layer cap poleward of the rain belt). Probes (namibia_kalahari, r63):
+| convective_rh_gate 0                                      | summer rain 3-6 mm/month (obs 20-50) |
+| + convective_rh_chi0 0                                    | identical |
+| convective_rh_gate_pole 0.5 (e119)                        | no change |
+| gate 0 + sverdrup 0 + ws_height_frac 1.0 + wet nudge to 30 | summer 10-13 mm/month, winter 7-8 (obs 1-2), summer +0.5-1.3 C |
+Even with all four limits removed the existing closures reach a quarter of the observed summer rain and add winter
+rain. The Kalahari needs a dedicated summer heat-low storm scheme (rain set by surface heating and boundary-layer
+moisture, seasonally gated), not a retune of the column-RH closures. Not attempted: new physics with Sahara/Arabia
+risk; left for an owner decision.
