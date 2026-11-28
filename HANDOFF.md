@@ -4,6 +4,12 @@ climate gains and rebuild only when asked or when a substantial set of gains has
 **OWNER RULE (27 Nov 2026): "It's about earth accuracy first and foremost, always."** Painted-zone agreement on the
 invented world never outweighs Earth accuracy; the r58 atlas stands despite the Mediterranean loss (strict 0.35->0.22).
 
+# e140 MONSOON GATES ON OBSERVED PRESSURE: REJECTED AT SEALED BB (28 Nov 2026). r59 stays current; BB SPENT.
+W22 finalist passed dev6 vs r59 (S97 0.9856, q95 0.9957) and fine28 (0.9997) but failed sealed BB (1.0043 [0.995,
+1.013], rain +1.6 %: Kashmir, Myanmar, Congo drier). calibration/monsoon_pressure_20261128. Next sealed run needs a NEW
+sealed set. Somalia's wet bias is mostly not the wind: model column water matches NCEP (36-39 mm) yet rains 10 mm/day
+(obs <1) -> the rain closure over a shallow-moist, subsiding column is the next suspect (G2).
+
 # SOUTHERN OCEAN / OBSERVED SST LINE CLOSED (28 Nov 2026). r59 stays current.
 e138 (sst_zonal_obs, uniform blend of WOA18 zonal SST) refit W21: finalist w2_001 dev6 vs r59 S97 0.9974
 [0.9887, 1.0063] FAIL (calibration/ppe_20261123/W21_records). e138b (sst_zonal_obs_lat0/lat1, poleward-only blend)
