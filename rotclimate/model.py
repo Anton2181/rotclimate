@@ -106,7 +106,7 @@ BAND_FIELDS = ("hadley_edge", "itcz_mean", "storm_width", "subsidence_width", "c
                "subsidence_branch_gate_winter_deg", "subsidence_branch_gap", "edge_itcz_width", "subtropical_high_width",
                "dyn_omega_lat0", "dyn_omega_lat1", "obs_pw_nudge_wet_lat0", "obs_pw_nudge_wet_lat1",
                "convective_omega_lat0", "convective_omega_lat1", "monsoon_descent_tropics_lat0",
-               "monsoon_descent_tropics_lat1", "root_lat0", "root_lat1", "lapse_tropical_lat0", "lapse_tropical_lat1", "relief_lapse_lat0", "relief_lapse_lat1")
+               "monsoon_descent_tropics_lat1", "root_lat0", "root_lat1", "lapse_tropical_lat0", "lapse_tropical_lat1", "relief_lapse_lat0", "relief_lapse_lat1", "ws_height_lat0", "ws_height_lat1")
 BAND_FIELDS_SENTINEL = {"itcz_shift_ocean": lambda v: v < 0, "itcz_mean_land": lambda v: v <= -90,
                         "current_cold_lat0": lambda v: v <= 0, "current_warm_lat0": lambda v: v <= 0,
                         "storm_baroclinic_max_deg": lambda v: v <= 0, "storm_plateau_reach_deg": lambda v: v <= 0,
@@ -2283,7 +2283,13 @@ class ClimateModel:
                 # mountain rather than squeezed out: compare like with like
                 # e149: the share of the ground's height the column capacity feels (0.5 historical); a plateau's
                 # column starts at its own surface (Kalahari 1.1 km: capacity 64 mm vs ~50 real, RH under the gate)
-                Ws = w_sat(T_col - p.ws_height_frac * column_lapse * h_km)
+                hfrac = 0.5 * h_km
+                if p.ws_height_frac != 0.5:
+                    xh = (p.ws_height_frac - 0.5) * (np.minimum(h_km, p.ws_height_cap_km) if p.ws_height_cap_km > 0 else h_km)
+                    if p.ws_height_lat1 > p.ws_height_lat0:   # e149b: tropical plateaus only, first km only
+                        xh = xh * np.clip((p.ws_height_lat1 - np.abs(lat)) / (p.ws_height_lat1 - p.ws_height_lat0), 0.0, 1.0)
+                    hfrac = hfrac + xh
+                Ws = w_sat(T_col - column_lapse * hfrac)
             else:
                 Ws = w_sat(T_col - column_lapse * h_km) * np.exp(-h_km / 6.0)
             if p.column_saturation_scheme=='legacy':ocean_saturation=w_sat(SST)
