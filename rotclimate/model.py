@@ -98,6 +98,19 @@ COLD_HIGH_C = 10.0               # e48: a high's air this far below freezing ste
 DESCENT_KM = (4000.0, 1500.0, 890.0, 780.0)   # e49: the descent lies this far west of the heating (east with reversed spin), +- spread, and this far poleward, +- spread
 DESCENT_RAIN0 = 4.0              # e49: land rain (mm/day) beyond which the heating drives remote descent
 DESCENT_ASCENT_KM = 800.0        # e49: ... and lifts the air over itself, over this radius (the net is the descent)
+EARTH_TILT = 23.44                # e137: the tilt every latitude setting was fitted at
+SWING_FIELDS = ("itcz_shift", "hadley_shift", "itcz_plateau_gain")
+SWING_FIELDS_SENTINEL = ("itcz_shift_ocean",)
+BAND_FIELDS = ("hadley_edge", "itcz_mean", "storm_width", "subsidence_width", "current_cold_lat1", "current_warm_lat1",
+               "storm_plateau_offset_deg", "onset_base_lat", "onset_gap_deg", "sst_damping_lat", "sst_tropical_lat",
+               "subsidence_branch_gate_winter_deg", "subsidence_branch_gap", "edge_itcz_width", "subtropical_high_width")
+BAND_FIELDS_SENTINEL = {"itcz_shift_ocean": lambda v: v < 0, "itcz_mean_land": lambda v: v <= -90,
+                        "current_cold_lat0": lambda v: v <= 0, "current_warm_lat0": lambda v: v <= 0,
+                        "storm_baroclinic_max_deg": lambda v: v <= 0, "storm_plateau_reach_deg": lambda v: v <= 0,
+                        "continental_depth_lat": lambda v: v <= 0, "continentality_lat": lambda v: v <= 0,
+                        "subsidence_warming_taper": lambda v: v <= 0, "subsidence_branch_gate_lat": lambda v: v <= 0,
+                        "subsidence_warming_gap_land": lambda v: v < 0, "subsidence_warming_land_minlat": lambda v: v <= 0,
+                        "maritime_mean_lat": lambda v: v <= 0, "edge_itcz_poleward_width": lambda v: v <= 0}
 DESCENT_LAT = 40.0               # e49: ... from heating within this many degrees of the equator
 
 
@@ -215,6 +228,8 @@ class Result:
 
 
 class ClimateModel:
+    f_swing = 1.0                    # e137 defaults (Earth tilt); set per planet in __init__
+    f_band = 1.0
     tap = None
 
     def heat_face(self):
@@ -415,6 +430,21 @@ class ClimateModel:
             raise ValueError('Unknown orographic_scheme')
         if params.orographic_scheme == 'terrain-quadrature' and params.subgrid_orographic != 0:
             raise ValueError('Terrain quadrature replaces the subgrid relief proxy; set subgrid_orographic=0')
+        self.p_in = params
+        # e137: the circulation's latitudes follow the axial tilt. The seasonal swings (ITCZ, Hadley edge, the
+        # plateau excursion) were fitted on Earth's 23.44 deg and scale with tilt; fixed bands, band edges and
+        # ramp widths scale more weakly. Earth runs at 23.44 deg (factor exactly 1); only other planets change.
+        tf = params.tilt / EARTH_TILT if params.tilt > 0 else 1.0
+        self.f_swing = tf ** params.tilt_scaling
+        self.f_band = tf ** (params.tilt_scaling * params.lat_band_tilt_exponent)
+        if self.f_swing != 1.0 or self.f_band != 1.0:
+            fs, fb = self.f_swing, self.f_band
+            scaled = {k: getattr(params, k) * fs for k in SWING_FIELDS}
+            scaled.update({k: getattr(params, k) * fb for k in BAND_FIELDS})
+            for k, off in BAND_FIELDS_SENTINEL.items():       # fields whose sentinel means "off"
+                v = getattr(params, k)
+                scaled[k] = v if off(v) else v * (fs if k in SWING_FIELDS_SENTINEL else fb)
+            params = params.replace(**scaled)
         self.p = params
         self.g = build_grid(params) if grid is None else grid   # grid: e.g. real geography (earth.py)
         self.z = ZonalClimate(params)
@@ -523,7 +553,7 @@ class ClimateModel:
             # the sea off western India California's -6 C). Open to 40 deg or
             # beyond: the full current; smoothed over the current's scale.
             reach = g.sea_reach if g.sea_reach is not None else self._sea_reach()
-            fed = np.clip((reach - GYRE_LAT[0]) / (GYRE_LAT[1] - GYRE_LAT[0]), 0.0, 1.0)
+            fed = np.clip((reach - GYRE_LAT[0] * self.f_band) / ((GYRE_LAT[1] - GYRE_LAT[0]) * self.f_band), 0.0, 1.0)
             sea = (~g.land).astype(float)
             sig = p.current_scale_km / g.cell_km
             self.gyre = gauss(fed * sea, sig) / np.maximum(gauss(sea, sig), 1e-6)
@@ -640,7 +670,7 @@ class ClimateModel:
                 lo = np.floor(col).astype(int) % L; w = col - np.floor(col); A = A[lo] * (1 - w) + A[(lo + 1) % L] * w
             else:
                 hi = g.land & (ndi.gaussian_filter(np.where(g.land, g.elev, 0.0), 150.0 / g.cell_km, mode="nearest") > h_anchor)
-                lat_band = (np.abs(g.lat) >= 15) & (np.abs(g.lat) <= 60)
+                lat_band = (np.abs(g.lat) >= 15 * self.f_band) & (np.abs(g.lat) <= 60 * self.f_band)
                 per_col = (hi & lat_band).sum(axis=0) * g.cell_km ** 2
                 sig = self.p.itcz_plateau_lon_deg * 111.2 * max(np.cos(np.radians(float(np.mean(np.abs(g.lat))))), 0.1) / g.cell_km
                 A = ndi.gaussian_filter1d(per_col.astype(float), max(sig, 1e-6), mode="nearest") * np.sqrt(2 * np.pi) * sig
@@ -714,7 +744,7 @@ class ClimateModel:
             # band at the edge. A plateau of sinking ramps up over 5 deg from
             # ITCZ + gap and holds to the Hadley edge, where the band takes over.
             start = phi_i + p.subsidence_branch_gap
-            plateau = np.clip((lat - start) / 5.0, 0.0, 1.0) * (lat <= phi_h)
+            plateau = np.clip((lat - start) / (5.0 * self.f_band), 0.0, 1.0) * (lat <= phi_h)
             sub = np.maximum(sub, p.subsidence_branch * plateau)
         # subtropical highs sink hardest over the eastern side of ocean
         # basins on a prograde planet (dry west coasts: California,
@@ -797,7 +827,7 @@ class ClimateModel:
         if self.itcz_anchor is not None and s > 0:
             phi_i = phi_i + p.itcz_plateau_gain * self.itcz_anchor * s * hr      # e85 (summer only)
         phi_h = (p.hadley_edge + p.hadley_shift * s) * hr
-        phi_p = phi_h + 30.0
+        phi_p = phi_h + 30.0 * self.f_band
         u = np.zeros_like(lat)
         v = np.zeros_like(lat)
         # northern trades (e4b: weaker over big land masses in summer, where
@@ -879,7 +909,7 @@ class ClimateModel:
         v = np.where(m, 0.15 * uw * np.sin(np.pi * xi), v)
         # polar easterlies
         m = lat >= phi_p
-        xi = np.clip((lat - phi_p) / 30.0, 0, 1)
+        xi = np.clip((lat - phi_p) / (30.0 * self.f_band), 0, 1)
         u = np.where(m, -p.polar_speed * np.sin(np.pi * xi), u)
         v = np.where(m, -0.3 * p.polar_speed * np.sin(np.pi * xi), v)
         if np.any(lat < np.minimum(phi_hs, 0.0)):
@@ -1031,7 +1061,7 @@ class ClimateModel:
             north = (-di * np.cos(th) + dj * np.sin(th)) * g.cell_km
             w = (descent_weight(east, -north, prograde=not p.retrograde) - ascent_weight(east, north)) * g.cell_km ** 2
             self._descent_kernel = w[::-1, ::-1]                         # correlation as a convolution
-            self._descent_land = g.land & (np.abs(g.lat) <= DESCENT_LAT)
+            self._descent_land = g.land & (np.abs(g.lat) <= DESCENT_LAT * self.f_band)
         from scipy.signal import fftconvolve
         heat = np.where(self._descent_land, np.maximum(P - DESCENT_RAIN0, 0.0), 0.0)
         return np.maximum(fftconvolve(heat, self._descent_kernel, mode="same"), 0.0)
@@ -1104,7 +1134,8 @@ class ClimateModel:
         lat = self.lat
         # boundary currents: on a prograde planet the west coasts of continents
         # get cold currents in the subtropics and warm ones poleward of ~45 deg
-        band = np.cos(np.pi * (np.clip(lat, 10, 75) - 15.0) / 60.0)
+        fb = self.f_band
+        band = np.cos(np.pi * (np.clip(lat, 10 * fb, 75 * fb) - 15.0 * fb) / (60.0 * fb))
         sign = 1.0 if p.retrograde else -1.0
         cur = sign * p.current_strength * self.side * band
         if p.current_cold_lat0 > 0:
@@ -1138,7 +1169,7 @@ class ClimateModel:
             # coasts of continents (north-west Europe 4-6 C above its
             # latitude), the Labrador and Oyashio cool the east coasts. The
             # band above only reaches its subpolar sign slowly (1-2 C at 50 N)
-            sub = np.clip((np.abs(lat) - 42.0) / 10.0, 0.0, 1.0) * np.clip((72.0 - np.abs(lat)) / 8.0, 0.0, 1.0)
+            sub = np.clip((np.abs(lat) - 42.0 * fb) / (10.0 * fb), 0.0, 1.0) * np.clip((72.0 * fb - np.abs(lat)) / (8.0 * fb), 0.0, 1.0)
             cur = cur - sign * p.subpolar_current * self.side * sub
         if p.warm_current_seasonality > 0:
             # e66: a warm current's heat reaches the surface through the winter
@@ -1291,7 +1322,7 @@ class ClimateModel:
                     # weaker. Ramp the widening (chi above 0.5) in from
                     # continentality_lat to +20 deg; the maritime damping
                     # (chi below 0.5) is unchanged.
-                    ramp = np.clip((np.abs(lat) - p.continentality_lat) / 20.0, 0.0, 1.0)
+                    ramp = np.clip((np.abs(lat) - p.continentality_lat) / (20.0 * self.f_band), 0.0, 1.0)
                     amp = 1.0 + p.continentality * (np.minimum(chi - 0.5, 0.0) + ramp * np.maximum(chi - 0.5, 0.0))
                 if p.continentality_maritime != 1.0:
                     # e125: the maritime damping (chi below 0.5) on its own slope; maritime mid-latitude
@@ -1317,7 +1348,7 @@ class ClimateModel:
                         # Iran and north India were 3-8 C too cold in January
                         # and the Levant too hot in summer). Ramp the
                         # amplification in from continental_depth_lat to +20 deg.
-                        depth = depth * np.clip((np.abs(lat) - p.continental_depth_lat) / 20.0, 0.0, 1.0)
+                        depth = depth * np.clip((np.abs(lat) - p.continental_depth_lat) / (20.0 * self.f_band), 0.0, 1.0)
                     if p.continental_depth_highland_m > 0:
                         # e122: fade the deep-continent widening out over high ground (Tibet, Mongolia,
                         # the Altiplano already swing as wide as observed; calibration/boreal_20261124):
@@ -1344,7 +1375,7 @@ class ClimateModel:
                         # e123: mid-latitude only; tropical coasts (Gabon, NW Australia) sit by a sea whose
                         # mean is colder than their land (calibration/maritime_20261124). Ramp in from
                         # maritime_mean_lat to +15 deg.
-                        w = w * np.clip((np.abs(lat) - p.maritime_mean_lat) / 15.0, 0.0, 1.0)
+                        w = w * np.clip((np.abs(lat) - p.maritime_mean_lat) / (15.0 * self.f_band), 0.0, 1.0)
                     if p.maritime_mean_clip:
                         # e131: a maritime land's annual mean moves at most onto the sea's, never past it
                         w = np.minimum(w, 1.0)
@@ -1366,7 +1397,7 @@ class ClimateModel:
                     # poleward land the cold air can reach (self.pole_land)
                     # x the continental share of the air (chi) x a ramp from 25
                     # to 45 deg, where the winter sun weakens.
-                    dark = np.clip((np.abs(lat) - 25.0) / 20.0, 0.0, 1.0)
+                    dark = np.clip((np.abs(lat) - 25.0 * self.f_swing) / (20.0 * self.f_swing), 0.0, 1.0)
                     if p.continental_mean_season > 0:
                         # e130: the poleward cold pools exist in the cold season only; by April the snow
                         # under them is going and the air off them is mild (western Eurasia, western Canada
@@ -1404,7 +1435,7 @@ class ClimateModel:
                         # +1.4-1.7 C. The land start stays poleward of this.
                         start_land = np.maximum(start_land, p.subsidence_warming_land_minlat)
                     start = start + (start_land - start) * broad_w
-                branch = np.clip((lat - start) / 5.0, 0.0, 1.0) * (lat <= phi_h_w)
+                branch = np.clip((lat - start) / (5.0 * self.f_band), 0.0, 1.0) * (lat <= phi_h_w)
                 if p.subsidence_warming_taper > 0:
                     # e71b: the deepest sinking is in the 15-30 deg core of the
                     # branch; it fades over the last taper degrees to the edge
@@ -1797,7 +1828,7 @@ class ClimateModel:
             # sea regardless of the mean wind; modelled as exchange with the
             # surroundings (Gaussian of radius eddy_scale_km) at a rate that
             # peaks in the storm track
-            sw, so = p.storm_width * self.synoptic_scale, 13.0 * self.synoptic_scale
+            sw, so = p.storm_width * self.synoptic_scale, 13.0 * self.f_band * self.synoptic_scale
             centre = phi_h + so
             if p.storm_baroclinic > 0 and T_prev is not None:
                 # e68: storms grow where the north-south temperature contrast is
@@ -1815,7 +1846,7 @@ class ClimateModel:
                 sx, sy = BAROCLINIC_SMOOTH_KM / g.cell_km, 300.0 / g.cell_km
                 Ts = ndi.gaussian_filter(T_prev, (sy, sx), mode="nearest")
                 dTdlat = np.gradient(Ts, axis=0) / np.where(np.abs(np.gradient(lat, axis=0)) > 1e-9, np.gradient(lat, axis=0), 1e-9)
-                cool = np.clip(-dTdlat * np.sign(lat), 0.0, None) * ((np.abs(lat) >= 20.0) & (np.abs(lat) <= 70.0))
+                cool = np.clip(-dTdlat * np.sign(lat), 0.0, None) * ((np.abs(lat) >= 20.0 * self.f_band) & (np.abs(lat) <= 70.0 * self.f_band))
                 if p.storm_baroclinic_cold_c != -99.0:
                     # storms feed on the polar air mass: count the contrast only
                     # where the air is cool (full 10 K below this, none above),
@@ -2113,7 +2144,7 @@ class ClimateModel:
                     sm = ndi.gaussian_filter(np.where(g.land, g.elev, 0.0), 300.0 / g.cell_km, mode="nearest") / 1000.0
                     self._plateau_w = np.clip((sm - p.plateau_heating_km) / 2.0, 0.0, 1.0)
                     # extratropical plateaus only: the Altiplano's season is weak and its range already too large
-                    self._plateau_w = self._plateau_w * np.clip((np.abs(lat) - 20.0) / 15.0, 0.0, 1.0)
+                    self._plateau_w = self._plateau_w * np.clip((np.abs(lat) - 20.0 * self.f_band) / (15.0 * self.f_band), 0.0, 1.0)
                     if p.plateau_heating_cell:
                         # e134b: on the plateau itself, not in the basins beside it (the Tarim / Hexi corridor took
                         # the smoothed weight and got a range 1-2 C too large)
@@ -2550,13 +2581,13 @@ class ClimateModel:
                     # e86: deep convection over land only equatorward of the monsoon belt: poleward of
                     # (ITCZ - onset_gap_deg) dry air aloft overrides the shallow moist layer (the Sahel's
                     # rains fired in May-June, before the belt, with obs July-August peaks)
-                    ramp = np.clip((lat - (phi_i - p.onset_gap_deg)) / 5.0, 0.0, 1.0)
+                    ramp = np.clip((lat - (phi_i - p.onset_gap_deg)) / (5.0 * self.f_band), 0.0, 1.0)
                     instab = np.where(land, 1.0 + (instab - 1.0) * (1.0 - p.onset_suppression * ramp), instab)
                     if p.onset_base > 0:
                         # e135: before the rain belt arrives the Saharan air layer caps the shallow monsoon air,
                         # which is humid but does not rain (Sahel dew points of 20 C in May, 40 mm of rain):
                         # with the Gulf of Guinea at its observed warmth (e132) the Sahel rained 120 mm in May
-                        trop = np.clip((p.onset_base_lat - np.abs(lat)) / 5.0, 0.0, 1.0)
+                        trop = np.clip((p.onset_base_lat - np.abs(lat)) / (5.0 * self.f_band), 0.0, 1.0)
                         instab = np.where(land, instab * (1.0 - p.onset_base * ramp * trop), instab)
             else:
                 instab = 1.0
@@ -2594,7 +2625,7 @@ class ClimateModel:
                 # column along the branch core only, fading over the last 10 deg
                 # to the Hadley edge (raising subsidence_drying instead dried the
                 # mid-latitudes, which the summer edge band reaches)
-                core = (np.clip((lat - (phi_i + p.subsidence_branch_gap)) / 5.0, 0.0, 1.0)
+                core = (np.clip((lat - (phi_i + p.subsidence_branch_gap)) / (5.0 * self.f_band), 0.0, 1.0)
                         * np.clip((phi_h - lat) / 10.0, 0.0, 1.0))
                 if p.subsidence_branch_dry_rain > 0 and rain_prev is not None:
                     # e70c: where it rains the air rises (summer monsoon East
@@ -2609,7 +2640,7 @@ class ClimateModel:
                         if p.subsidence_branch_gate_lat > 0:
                             # e110b: ... and on the tropical side of the branch at any season (gate kept poleward,
                             # where the summer monsoons of East China, the US south and south Brazil need it)
-                            wint = np.maximum(wint, np.clip((p.subsidence_branch_gate_lat - np.abs(lat)) / 5.0, 0.0, 1.0))
+                            wint = np.maximum(wint, np.clip((p.subsidence_branch_gate_lat - np.abs(lat)) / (5.0 * self.f_band), 0.0, 1.0))
                         gate = gate + (1.0 - gate) * p.subsidence_branch_gate_winter * wint
                     core = core * gate
                 if p.heat_low_branch and p.heat_low_drying > 0 and getattr(self, "last_pres", None) is not None:
@@ -2676,7 +2707,7 @@ class ClimateModel:
                     heat = np.clip((T - 18.0) / 8.0, 0.0, 1.0)
                     if p.convective_rh_gate > 0:
                         # e93: the Saharan/Arabian air layer caps heated-land convection poleward of the rain belt (e86's ramp)
-                        ramp93 = np.clip((lat - (phi_i - p.onset_gap_deg)) / 5.0, 0.0, 1.0)
+                        ramp93 = np.clip((lat - (phi_i - p.onset_gap_deg)) / (5.0 * self.f_band), 0.0, 1.0)
                         if p.convective_rh_gate_dry > 0 and chi_dry is not None:
                             # e117: the dry layer aloft comes off dry land (Sahara, Arabia, the Australian interior);
                             # spring air over the southern Amazon and Brazil rises from wet forest and convects before
@@ -3106,7 +3137,7 @@ class ClimateModel:
             numerics['vapor_flux_budget']=ledger
             numerics['all_checks_passed'] &= (ledger['max_relative_transport_cancellation']<=1e-10 and
                                              ledger['max_scaled_equation_residual']<=p.moisture_residual_tol+1e-12)
-        return Result(params=p, grid=g, days=days, snow=snow, moisture_budget=budget, numerics=numerics, layer_water=layer_water_out, **out)
+        return Result(params=self.p_in, grid=g, days=days, snow=snow, moisture_budget=budget, numerics=numerics, layer_water=layer_water_out, **out)
 
 
 def _run_one(params):

@@ -4,6 +4,19 @@ climate gains and rebuild only when asked or when a substantial set of gains has
 **OWNER RULE (27 Nov 2026): "It's about earth accuracy first and foremost, always."** Painted-zone agreement on the
 invented world never outweighs Earth accuracy; the r58 atlas stands despite the Mediterranean loss (strict 0.35->0.22).
 
+# e137 TILT SCALING IMPLEMENTED, NOT CALIBRATED (28 Nov 2026, owner: "Implement it for all similar settings but don't
+re-calibrate yet. Let's say we do a big recalibration of all settings at r65")
+Every circulation latitude now follows the axial tilt: seasonal swings (itcz_shift, itcz_shift_ocean, hadley_shift,
+itcz_plateau_gain, winter-darkness ramp) x tilt/23.44; fixed bands, band edges and ramp widths (Hadley edge, ITCZ mean,
+storm/subsidence widths, current bands and fades, sst/continental/maritime latitudes, onset gap/cap, gyre and descent
+limits, polar edge, all 5/15/20-degree ramps) x (tilt/23.44)^0.5 (lat_band_tilt_exponent, declared). Params tilt_scaling
+(1 = on) and lat_band_tilt_exponent in config; lists SWING_FIELDS / BAND_FIELDS(_SENTINEL) at the top of model.py.
+Earth runs force tilt 23.44 -> bit-identical (Iberia, Japan T and P checked). The world (tilt 24.7) changes (ds32 up to
+3.2 C / 6.4 mm-day); atlas NOT rebuilt. New params classified in rotclimate/joint.py (edge_pw_source = world field).
+PLAN r65: one big recalibration of all settings (Earth physics + world) with e137 on. Tests: 6 failures predate this
+(SimpleNamespace mocks lack 'sea'/'itcz_anchor' since 17 Nov). West Africa: e135 confined to |lat|<22 (wb: S97 0.9920,
+tropical_wet 1.075; not useful); e134/e136 untested globally.
+
 # r59 ADOPTED (28 Nov 2026): r58 + e132b warm currents fade toward the equator (Somali sea 4-6 C too warm).
 dev6 S97 0.9870 [0.9746, 0.9986], fine28 1.000, sealed AA 0.9996 [0.9967, 1.0028] (AA now SPENT).
 calibration/local_accuracy_20261023/r59_adoption.json; world r59w. Atlas NOT rebuilt (owner: not so often); the r59

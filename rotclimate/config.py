@@ -156,6 +156,8 @@ class Params:
     t_require_convergence: bool = False
 
     # ---------------------------------------------------------------- winds
+    tilt_scaling: float = 1.0         # e137: circulation latitudes follow the axial tilt: seasonal swings x (tilt / 23.44)^this, fixed bands x (tilt / 23.44)^(this x lat_band_tilt_exponent); Earth (23.44) exactly unchanged; 0 = off
+    lat_band_tilt_exponent: float = 0.5  # e137: fixed latitude bands (Hadley edge, current bands, ramps) depend on tilt more weakly than the seasonal swings (declared, not fitted: one Earth tilt cannot fit it)
     hadley_edge: float = 30.0         # annual-mean subtropical high latitude
     hadley_shift: float = 5.0         # seasonal poleward shift in summer
     itcz_mean: float = 5.0
