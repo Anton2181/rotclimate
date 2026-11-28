@@ -402,6 +402,8 @@ class Params:
     dry_heating_hot: float = 0.0     # e153: extra dry-ground sunshine heating (as dry_heating) in warm climates only; 0 = off
     dry_heating_hot_c: float = 15.0  # e153: ... ramping in over 8 K above this annual-mean land equilibrium (C)
     convective_omega_source: str = "observed"  # e154: "observed" (NCEP, Earth) or "wtg" (own-rain weak-temperature-gradient stand-in); without obs_omega the stand-in is used if omega_wtg_max > 0
+    omega_div_dp: float = 30000.0  # T10b: depth (Pa) of the diverging low-level layer: omega_500 = this x low-level divergence
+    omega_div_km: float = 500.0    # T10b: smoothing of the divergence (km)
     omega_wtg_max: float = 0.0     # e154: 500 hPa sinking (Pa/s) under a rainless column; 0 = off
     omega_wtg_p0: float = 3.0      # e154: smoothed rain (mm/day) whose latent heating balances radiative cooling (no sinking)
     omega_wtg_km: float = 1000.0   # e154: smoothing scale of the rain (km)

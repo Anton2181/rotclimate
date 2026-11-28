@@ -2823,14 +2823,23 @@ class ClimateModel:
                 P_s = gauss(np.maximum(P_last, 0.0), p.omega_wtg_km / g.cell_km)
                 om_wtg = p.omega_wtg_max * np.clip(1.0 - P_s / p.omega_wtg_p0, 0.0, 1.0)
             om_model = getattr(g, "model_omega", None) if p.convective_omega_source == "model" else None
-            if p.convective_omega > 0 and (getattr(g, "obs_omega", None) is not None or om_wtg is not None or om_model is not None):
+            om_div = None
+            if p.convective_omega_source == "div":
+                # T10b (world-legal): mass continuity - air spreading out near the surface is fed by sinking air above,
+                # omega_500 ~ low-level divergence x the depth of the diverging layer (omega_div_dp Pa), smoothed over
+                # omega_div_km. Reads the model's circulation (pressure-driven winds), not its rain.
+                om_div = p.omega_div_dp * gauss(surface_div, p.omega_div_km / g.cell_km)
+            if p.convective_omega > 0 and (getattr(g, "obs_omega", None) is not None or om_wtg is not None or om_model is not None
+                                           or om_div is not None):
                 # e141: deep convection needs large-scale ascent. Southern Somalia's column is as moist as NCEP's
                 # (36-39 mm) and hot, so the instability boost (x2.5) rained 10 mm/day all summer (obs <1) under
                 # steady 500 hPa sinking (+0.02-0.035 Pa/s, as over the Sahara) that the e49 kernel (descent west and
                 # poleward of monsoon heating) does not place there. Earth grids read the observed omega.
                 mpo = ((d - p.winter_solstice_day) / p.year_days * 12.0 + 12.0 - 0.838) % 12.0
                 m0o = int(np.floor(mpo)); fo = mpo - m0o
-                if om_model is not None:
+                if om_div is not None:
+                    om = om_div                                                     # T10b
+                elif om_model is not None:
                     # T10: the fixed two-pass field from a global model rain climatology (world-legal)
                     om = (1.0 - fo) * om_model[m0o % 12] + fo * om_model[(m0o + 1) % 12]
                 elif om_wtg is not None:

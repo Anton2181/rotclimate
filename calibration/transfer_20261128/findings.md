@@ -35,3 +35,13 @@ the observed omega corrects, so any rain-derived field inherits them.
 Conclusion: a world-legal omega must come from the model's circulation, not its rain (e.g. low-level divergence of the
 model's winds, or the Hadley/monsoon pressure pattern), or the world accepts these terms do not transfer.
 The global model-rain map is still useful: it can replace WorldClim in the Earth e49 descent field (the target leak).
+
+## T10b: omega from the model's low-level divergence - not attempted as a screen (diagnostic says no)
+3e4 Pa x 500 km-smoothed surface divergence vs NCEP 500 hPa omega, land means (months 1/4/7/10):
+S Somalia -0.05..-0.08 (convergent) vs +0.02..+0.04 (sinking); Algeria +0.09 / -0.08 vs +0.04 / +0.01;
+Sahel -0.12 in April vs +0.02; Gabon -0.08 vs -0.04. No sign agreement where it matters: the model's monsoon inflow
+converges where the real 500 hPa air sinks. Option "div" kept in code (off).
+OVERALL: no model-internal field (own rain, fixed two-pass rain, low-level divergence) reproduces the observed
+descent that e141 relies on. Remaining world-legal route: Earth ANALOGS - give each world cell the NCEP omega / RH500
+of Earth cells in the same climatic position (latitude, side of continent, distance from coast, elevation, season),
+as rotclimate/analogs.py does for other fields; or accept that the r60-r64b Earth gains do not transfer.
