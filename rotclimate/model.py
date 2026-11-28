@@ -2192,6 +2192,8 @@ class ClimateModel:
                     ls = ndi.gaussian_filter(g.land.astype(float), p.relief_sigma_km / g.cell_km, mode='nearest')
                     rel = np.where(g.land, h_km - hs / np.maximum(ls, 1e-6) / 1000.0, 0.0)
                     fade = np.clip((p.relief_lapse_lat1 - np.abs(lat)) / max(p.relief_lapse_lat1 - p.relief_lapse_lat0, 1e-6), 0.0, 1.0)
+                    if p.relief_positive_only:
+                        rel = np.maximum(rel, 0.0)   # e147b: lowlands beside mountains are not warmed
                     self._relief_w = rel * fade
                 T = T - p.relief_lapse * self._relief_w
             if p.plateau_heating != 0:
