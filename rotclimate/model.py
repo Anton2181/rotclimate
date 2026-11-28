@@ -1345,6 +1345,14 @@ class ClimateModel:
                     dryland = g.land_frac * (1.0 - np.clip(soil_ann / (0.75 * capb), 0.0, 1.0))
                     chi_dry = self.solver.solve(uc, vc, p.heat_diffusion, lamC, lamC * dryland, edge,
                                                 guess=edge if chi_dry is None else chi_dry)
+                if p.land_phase_cont_days != 0.0:
+                    # e151: one-sided e121. Deep-continental air (chi above 0.5) follows the sun with the land's
+                    # own short memory, not the zonal column's ocean-damped one: the Volga, Kazakh steppe, E Europe
+                    # and Siberia had April ~ October in the zonal column (real April 1-2 C warmer) and ran 3-5 C
+                    # cold in April under r63. Earlier by land_phase_cont_days x clip(2 (chi - 0.5), 0, 1);
+                    # maritime land (chi <= 0.5) unchanged.
+                    dTc = (self.z.land(lat, d + 5.0) - self.z.land(lat, d - 5.0)) / 10.0
+                    Tl = Tl + p.land_amplitude * dTc * p.land_phase_cont_days * np.clip(2.0 * (chi - 0.5), 0.0, 1.0)
                 if p.land_phase_days != 0.0:
                     # e121: the land column's seasonal phase by the air's land share. Air off the sea
                     # peaked 20-43 days late over maritime temperate land (NZ, British Isles, Patagonia,

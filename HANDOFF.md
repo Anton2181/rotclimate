@@ -10666,3 +10666,8 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
 33 pts, all worse than r63 (best 1.0025 at albedo≈off); emulator gain 0.0013 < 0.005. No adoption,
 no sealed spend. Records: calibration/ppe_20261123/W26_records. Albedo deferred to r65 with a
 structural partner (clear-sky LW/dust). r63 still adopted.
+
+## G3 spring timing probe (28 Nov 2026) — no adoption
+e151 land_phase_cont_days (off by default) REJECTED (S97 1.042-1.130: west interiors better, Mongolia/
+Tibet/Hokkaido/Canadian Shield worse). Volga budget: Apr cold from the zonal column's symmetric phase +
+continental centre; May-Jun cold from wet_cooling under a spring rain excess. calibration/spring_20261128.
