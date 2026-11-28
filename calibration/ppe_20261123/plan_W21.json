@@ -1,0 +1,57 @@
+{
+ "version": 1,
+ "date": "2026-11-28",
+ "policy": "v6",
+ "status": "NEW wave, declared before any W21 result",
+ "why": "The regional zonal sea (EBM + one global sst_offset -4.4 C) runs the Southern Ocean 4-6 C too cold in winter (50 S: 1.2 vs WOA18 5.5): the offset was fitted where warm-current terms (subpolar drift 9.2 C, boundary currents 5.5 C) hide it. e138 takes the WOA18 zonal mean at the real latitude and season (world-legal, tilt-scaled). Screen vs ref58local (output/ppe_20261127/zs) on r59: weight 1.0 S97 1.036 (southern Chile 2.84 -> 1.32 C, Somalia rain loss 3.66 -> 2.74, Sahel rain better; western Europe 1.25 -> 3.35 C, British Isles, Nova Scotia, Hokkaido, Victoria too warm: the current terms were fitted on the cold baseline); 0.5 S97 0.9926. Refit e138 with the sea-surface terms fitted around the old baseline.",
+ "method": "scripts/ppe.py: Sobol wave 1 (24 + base), GP emulators, emulator waves of 12; close when the predicted gain over the best observed point is < 0.005; at most 2 emulator waves. Finalist = best by dev objective ONLY; then dev6 (vs r58), fine28 once (vs r58), ONE sealed AA run (vs r58). A fail may be continued at most once, declared before it runs. Propose is called ONCE per wave.",
+ "base": "calibration/local_accuracy_20261023/r59_params.json",
+ "base_set": {
+  "sst_zonal_obs": 0.5
+ },
+ "reference": "output/ppe_20261127/ref58local",
+ "reference_name": "r58",
+ "extra_parts": {
+  "tropical_t": "calibration/tropical_check_20261122t/regions.json",
+  "sealed_r": "calibration/sealed_20261122r/regions.json",
+  "sealed_S18": "calibration/sealed_20261123S18/regions.json",
+  "sealed_U18": "calibration/sealed_20261124U18/regions.json"
+ },
+ "out": "output/ppe_20261127/W21",
+ "seed": 20261221,
+ "wave1": 24,
+ "knobs": {
+  "sst_zonal_obs": [
+   0.3,
+   1.0,
+   "lin"
+  ],
+  "sst_offset": [
+   -6.0,
+   -1.0,
+   "lin"
+  ],
+  "current_strength": [
+   2.5,
+   6.5,
+   "lin"
+  ],
+  "subpolar_current": [
+   3.0,
+   10.0,
+   "lin"
+  ],
+  "sst_damping": [
+   0.0,
+   0.6,
+   "lin"
+  ],
+  "inland_sea_warming": [
+   1.0,
+   5.0,
+   "lin"
+  ]
+ },
+ "gates": "policy v6 vs r59 (gate_v3.py dev6 against an r59 reference run, fine28, then ONE sealed run on a NEW sealed set drawn before the finalist is known); pass -> r60. Scoring during the wave is paired with ref58local (r58); the finalist is re-gated against r59.",
+ "base_note": "r59 + e138 at weight 0.5 (a candidate; scoring paired against r58)"
+}
