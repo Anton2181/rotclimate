@@ -43,3 +43,13 @@ term. Column water May 39 vs NCEP 29 (early), Jul-Aug 31 vs 38-42 (late).
 Probes with no useful effect: obs_pw_nudge_excess 0.2/0.05 (nudge gated by rh0), e136 itcz_land_sharp alone
 (needs e134), e134 lag 30/43 + sharp 2 (Sahel May-Jun rain -0..-14 mm, T +0.2; southern Amazon onset later).
 Lead: inland heating of monsoon sea air (air-mass modification over hot land), not the rain belt.
+
+## Kalahari / inland Australia after r64b (same session)
+With the wet nudge reaching the plateau (lat 25-30, h fade 2-3 km) the Kalahari column holds NCEP's water (24 mm)
+and still rains ~5 mm/month: the convection caps (e93 gate, chi0 cut, e94 descent, e141 omega) are redundant; only all
+off gives 154 vs 237 mm. e152d (rh500 release of chi0/descent/omega caps on heat and rate, off) screen vs r64b:
+d1 S97 1.0139 [1.0005, 1.0295] FAIL: Kalahari 0.863, inland Australia 0.954, but Algeria 1.963, Libyan desert 1.738,
+Sudan 1.266, Tripolitania 1.258 (arid 1.059). NCEP 500 hPa RH cannot separate them: Kalahari summer 30-35 %, inland
+Australia 34 %, Libya/Tripolitania spring 33-36 %, Algeria summer 24-26 %. A stricter own ramp (27-33 %) loses the
+Kalahari gain and keeps Sudan/Algeria wet. LINE CLOSED for rh500: needs a discriminator for the Sahara's deep dry
+boundary layer / heat-low capping inversion (e.g. NCEP 700 hPa temperature or omega profile), deferred to r65.

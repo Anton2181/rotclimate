@@ -2924,17 +2924,24 @@ class ClimateModel:
                                 keep152 = 1.0 - (1.0 - keep152) * np.clip(1.0 - wet152 / p.convective_rh_gate_rh500_soil, 0.0, 1.0)
                             ramp93 = ramp93 * keep152
                         heat = heat * (1.0 - p.convective_rh_gate * ramp93)
+                    rel152 = 1.0
+                    if p.convective_rh_gate_rh500_chi and keep152 is not None:
+                        # e152d: share of the remaining caps kept (1 = all). Release = the e152c release x an own, stricter
+                        # 500 hPa RH ramp (chi_lo -> chi_hi; the Sahara's summer column sits at 24-26 %)
+                        rel152 = keep152
+                        if p.convective_rh_gate_chi_hi > p.convective_rh_gate_chi_lo:
+                            rel152 = 1.0 - (1.0 - keep152) * np.clip((rh152 - p.convective_rh_gate_chi_lo)
+                                                                     / (p.convective_rh_gate_chi_hi - p.convective_rh_gate_chi_lo), 0.0, 1.0)
                     if p.convective_rh_chi0 > 0 and chi is not None:
                         # e93: ... and in air that has crossed land (desert air aloft; Najd), as e84; sea air (Bengal) keeps it
                         chi93 = chi if chi_dry is None else chi - p.convective_rh_chi_dry * (chi - chi_dry)     # e103
                         cut93 = np.clip((chi93 - p.convective_rh_chi0) / (1.0 - p.convective_rh_chi0), 0.0, 1.0)
                         if p.convective_rh_gate_rh500_chi and keep152 is not None:
-                            # e152d: the land-air share is the same dry layer aloft by proxy; where NCEP 500 hPa RH says the
+                            # (cut by rel152 below; e152d) the land-air share is the same dry layer aloft by proxy; where NCEP 500 hPa RH says the
                             # layer is moist, before the rains, release it as e152c (inland Australia: column water at
                             # NCEP's, rain a tenth of observed)
-                            cut93 = cut93 * keep152
+                            cut93 = cut93 * rel152
                         heat = heat * (1.0 - cut93)
-                    rel152 = keep152 if (p.convective_rh_gate_rh500_chi and keep152 is not None) else 1.0   # e152d
                     if p.convective_descent > 0 and p.monsoon_descent > 0:
                         heat = heat * (1.0 - descent_cap * rel152)              # e94 (e152d: released where aloft is moist)
                     if omega_cap is not None:

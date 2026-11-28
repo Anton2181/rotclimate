@@ -393,6 +393,8 @@ class Params:
     convective_rh_gate_rh500_chi: bool = False   # e152d: the e152c release also lifts the e93 land-air-share (chi0) cut
     subsidence_branch_rh500_lo: float = 0.0   # e152e (Earth only): branch drying full below this NCEP 500 hPa RH (%) over land
     subsidence_branch_rh500_hi: float = 0.0   # e152e: ... none above; hi <= lo = off
+    convective_rh_gate_chi_lo: float = 0.0   # e152d: own 500 hPa RH ramp: no release below this (%) ...
+    convective_rh_gate_chi_hi: float = 0.0   # e152d: ... full e152c-share release above; hi <= lo = e152c's own ramp
     land_phase_cont_days: float = 0.0  # e151: deep-continental land cycle earlier by this x clip(2 (chi - 0.5), 0, 1) days (0 = off)
     snow_albedo: float = 0.0          # e16: K of land cooling under full snow cover per 480 W m-2 of sunshine
     snow_inversion: float = 0.0       # e128: K of 2 m cooling under full snow cover in full darkness (surface inversion)
