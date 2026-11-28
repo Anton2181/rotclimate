@@ -771,7 +771,20 @@ class ClimateModel:
 
     def _zonal_sea(self, lat, d):
         p = self.p
-        return self.z.sea(lat, d, p.sst_offset, p.sst_damping, p.sst_damping_lat, p.sst_tropical, p.sst_tropical_lat)
+        T = self.z.sea(lat, d, p.sst_offset, p.sst_damping, p.sst_damping_lat, p.sst_tropical, p.sst_tropical_lat)
+        if p.sst_zonal_obs > 0:
+            # e138: the zonal energy balance's sea (with one global offset, -4.4 C) ran the Southern Ocean 4-6 C
+            # too cold in winter (50 S: 1.2 C vs WOA18 5.5): the offset was fitted where large warm-current terms
+            # (subpolar drift 9 C) hide it, and the south has no subpolar gyre. Take the observed zonal mean at
+            # the real latitude and season instead (latitude scaled with the tilt, e137).
+            from .earth import zonal_sst
+            south = getattr(p, "ebm_land", "") == "earth_mirrored"
+            lat_real = (-1.0 if south else 1.0) * np.asarray(lat, float) / self.f_band
+            eday = 354.5 + (d - p.winter_solstice_day) / p.year_days * 365.25 + (365.25 / 2 if south else 0.0)
+            obs = zonal_sst(lat_real, (eday / 365.25 * 12.0 - 0.5) % 12.0)
+            if obs is not None:
+                T = (1.0 - p.sst_zonal_obs) * T + p.sst_zonal_obs * obs
+        return T
 
     def _sea_annual_field(self):
         """e28: annual-mean temperature of the nearby sea (its currents included,

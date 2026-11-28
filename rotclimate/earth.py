@@ -657,6 +657,31 @@ def zonal_land_pw(lat, mirrored=False):
     return np.roll(out, 6, axis=0) if mirrored else out
 
 
+WOA_ZONAL = CACHE / "woa_zonal_sst.npz"   # derived from the WOA18 sea surface (zonal_sst)
+
+
+def zonal_sst(lat, month_pos):
+    """e138: the WOA18 zonal-mean sea-surface temperature (C) at real latitude(s) `lat` and fractional calendar
+    month position(s) `month_pos` (0 = mid-January). Ocean points only; the latitude's mean over every longitude.
+    Depends on latitude and season only, so an invented Earth-like planet can use it. None without the WOA cache."""
+    if not WOA_ZONAL.exists():
+        lats = np.arange(-80.0, 80.01, 1.0); lon = np.arange(0.0, 360.0, 1.0)
+        rows = []
+        for la in lats:
+            o = observed_sst(np.full_like(lon, la), lon)
+            if o is None:
+                return None
+            rows.append(np.nanmean(np.where(np.isfinite(o), o, np.nan), axis=1))
+        tab = np.array(rows).T                                       # [12, nlat]
+        for m in range(12):                                          # fill all-land rows by interpolation
+            ok = np.isfinite(tab[m]); tab[m] = np.interp(lats, lats[ok], tab[m][ok])
+        np.savez(WOA_ZONAL, sst=tab, lat=lats)
+    z = np.load(WOA_ZONAL); tab, lats = z["sst"], z["lat"]
+    mp = np.asarray(month_pos, float) % 12.0; m0 = np.floor(mp).astype(int); fr = mp - m0
+    a = np.array([np.interp(np.asarray(lat, float), lats, tab[m]) for m in range(12)])
+    return (1.0 - fr) * a[m0 % 12] + fr * a[(m0 + 1) % 12] if a.ndim == 1 else (1.0 - fr) * a[m0 % 12] + fr * a[(m0 + 1) % 12]
+
+
 def fetch_at(lat, lon, fetch_km: float = FETCH_KM):
     """West fetch (0-1) at points, bilinear on the 0.5-degree grid."""
     from scipy import ndimage as ndi

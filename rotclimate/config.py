@@ -284,6 +284,7 @@ class Params:
     ocean_transport: float = 0.0      # e27: the oceans' own poleward heat transport, x the air's diffusion (0 = none)
     ocean_heat_capacity: float = 1.0  # mixed-layer heat capacity x ~26 m of water (the zonal sea's seasonal swing and lag)
     ocean_mixed_seasonality: float = 0.0  # e29: mixed layer shallower in summer, deeper in winter (heat capacity x (1 -/+ this))
+    sst_zonal_obs: float = 0.0        # e138: share (0-1) of the regional zonal sea taken from the WOA18 zonal mean at the real latitude and season (the EBM's sea, with sst_offset, keeps the rest); 0 = off
     sst_damping: float = 0.0  # e98: the regional sea's seasonal swing x (1 - this x ramp(|lat| from 10 deg to sst_damping_lat)); EBM untouched
     sst_damping_lat: float = 50.0  # e98: latitude where sst_damping is full
     sst_tropical: float = 0.0  # e102: K added to the regional zonal sea equatorward of 25 deg, fading to none at sst_tropical_lat; 0 = off
